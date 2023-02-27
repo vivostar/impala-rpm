@@ -1,5 +1,7 @@
 %define debug_package %{nil}
 %define __jar_repack %{nil}
+# disable repacking jars
+%define __os_install_post %{nil}
 
 Name:       impala
 Version:    %{VERSION}
@@ -62,9 +64,9 @@ impala state-store daemon script
 %setup -q
 
 %build
-# export IMPALA_HOME=`pwd`
-# yes | ./bin/bootstrap_system.sh
-# ./buildall.sh -notests -release
+export IMPALA_HOME=`pwd`
+yes | ./bin/bootstrap_system.sh
+./buildall.sh -notests -release
 
 %install
 %{__rm} -rf %{buildroot}
@@ -83,7 +85,7 @@ impala state-store daemon script
 %{__cp} -rp www %{buildroot}/usr/lib/impala/
 
 %{__install} -d %{buildroot}/usr/lib/impala/toolchain
-%{__cp} -rp toolchain/gcc-4.9.2 %{buildroot}/usr/lib/impala/toolchain
+%{__cp} -rp toolchain/toolchain-packages-gcc10.4.0 %{buildroot}/usr/lib/impala/toolchain
 # %{__cp} -rp toolchain/kudu-0.8.0-RC1 %{buildroot}/usr/lib/impala/toolchain
 
 %{__install} -d %{buildroot}/usr/lib/impala-shell
@@ -92,6 +94,7 @@ impala state-store daemon script
 %{__cp} -rp shell/build/impala-shell-%{version}-RELEASE/gen-py %{buildroot}/usr/lib/impala-shell
 %{__cp} -rp shell/build/impala-shell-%{version}-RELEASE/lib %{buildroot}/usr/lib/impala-shell
 %{__cp} -r shell/build/impala-shell-%{version}-RELEASE/impala_shell.py %{buildroot}/usr/lib/impala-shell
+%{__cp} -r shell/build/impala-shell-%{version}-RELEASE/compatibility.py %{buildroot}/usr/lib/impala-shell
 %{__cp} -r shell/build/impala-shell-%{version}-RELEASE/impala-shell %{buildroot}/usr/bin/
 sed -i -e 's/SCRIPT_DIR=.*$/SCRIPT_DIR=\/usr\/lib\/impala-shell/g' %{buildroot}/usr/bin/impala-shell
 

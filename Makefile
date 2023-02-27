@@ -19,8 +19,7 @@ mkdir: clean
 	mkdir -p rpmbuild/SRPMS
 
 download: mkdir
-	# curl -L -o rpmbuild/SOURCES/$(full_name).tar.gz $(download_url); 
-	mv /tmp/impala-$(version).tar.gz rpmbuild/SOURCES
+	curl -L -o rpmbuild/SOURCES/$(full_name).tar.gz $(download_url); 
 
 rpm: download
 	rpmbuild $(RPM_OPTS) \
