@@ -11,16 +11,16 @@ URL:        http://impala.apache.org/
 Source:     %{name}-%{version}.tar.gz
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Packager:   Alexander Hurd <hurdad@gmail.com>
-BuildRequires: java-1.7.0-openjdk-devel
-BuildRequires: maven
-BuildRequires: redhat-lsb
-BuildRequires: gcc-c++
-BuildRequires: python-devel
-BuildRequires: python-setuptools
-BuildRequires: cyrus-sasl-devel
-BuildRequires: openssl-devel
-BuildRequires: vim-common
-BuildRequires: doxygen
+# BuildRequires: java-1.7.0-openjdk-devel
+# BuildRequires: maven
+# BuildRequires: redhat-lsb
+# BuildRequires: gcc-c++
+# BuildRequires: python-devel
+# BuildRequires: python-setuptools
+# BuildRequires: cyrus-sasl-devel
+# BuildRequires: openssl-devel
+# BuildRequires: vim-common
+# BuildRequires: doxygen
 
 Requires: bigtop-utils >= 0.7
 
@@ -62,7 +62,9 @@ impala state-store daemon script
 %setup -q
 
 %build
-./buildall.sh -notests -release
+# export IMPALA_HOME=`pwd`
+# yes | ./bin/bootstrap_system.sh
+# ./buildall.sh -notests -release
 
 %install
 %{__rm} -rf %{buildroot}
@@ -77,7 +79,7 @@ impala state-store daemon script
 
 %{__install} -d %{buildroot}/usr/lib/impala/lib
 %{__cp} -rp fe/target/dependency/* %{buildroot}/usr/lib/impala/lib/
-%{__cp} -p fe/target/impala-frontend-0.1-SNAPSHOT.jar %{buildroot}/usr/lib/impala/lib/
+%{__cp} -p fe/target/impala-frontend-%{version}-RELEASE.jar %{buildroot}/usr/lib/impala/lib/
 %{__cp} -rp www %{buildroot}/usr/lib/impala/
 
 %{__install} -d %{buildroot}/usr/lib/impala/toolchain
@@ -85,11 +87,12 @@ impala state-store daemon script
 # %{__cp} -rp toolchain/kudu-0.8.0-RC1 %{buildroot}/usr/lib/impala/toolchain
 
 %{__install} -d %{buildroot}/usr/lib/impala-shell
-%{__cp} -rp shell/build/impala-shell-%{version}-SNAPSHOT/ext-py %{buildroot}/usr/lib/impala-shell
-%{__cp} -rp shell/build/impala-shell-%{version}-SNAPSHOT/gen-py %{buildroot}/usr/lib/impala-shell
-%{__cp} -rp shell/build/impala-shell-%{version}-SNAPSHOT/lib %{buildroot}/usr/lib/impala-shell
-%{__cp} -r shell/build/impala-shell-%{version}-SNAPSHOT/impala_shell.py %{buildroot}/usr/lib/impala-shell
-%{__cp} -r shell/build/impala-shell-%{version}-SNAPSHOT/impala-shell %{buildroot}/usr/bin/
+%{__cp} -rp shell/build/impala-shell-%{version}-RELEASE/ext-py2 %{buildroot}/usr/lib/impala-shell
+%{__cp} -rp shell/build/impala-shell-%{version}-RELEASE/ext-py3 %{buildroot}/usr/lib/impala-shell
+%{__cp} -rp shell/build/impala-shell-%{version}-RELEASE/gen-py %{buildroot}/usr/lib/impala-shell
+%{__cp} -rp shell/build/impala-shell-%{version}-RELEASE/lib %{buildroot}/usr/lib/impala-shell
+%{__cp} -r shell/build/impala-shell-%{version}-RELEASE/impala_shell.py %{buildroot}/usr/lib/impala-shell
+%{__cp} -r shell/build/impala-shell-%{version}-RELEASE/impala-shell %{buildroot}/usr/bin/
 sed -i -e 's/SCRIPT_DIR=.*$/SCRIPT_DIR=\/usr\/lib\/impala-shell/g' %{buildroot}/usr/bin/impala-shell
 
 %{__install} -d %{buildroot}/etc/security/limits.d

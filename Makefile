@@ -1,6 +1,6 @@
 # Impala
 SHELL := /bin/bash 
-version = 2.10.0
+version = 4.2.0
 name = impala
 full_name = $(name)-$(version)
 download_url = "https://github.com/apache/$(name)/archive/$(version).tar.gz"
@@ -19,7 +19,8 @@ mkdir: clean
 	mkdir -p rpmbuild/SRPMS
 
 download: mkdir
-	curl -L -o rpmbuild/SOURCES/$(full_name).tar.gz $(download_url); 
+	# curl -L -o rpmbuild/SOURCES/$(full_name).tar.gz $(download_url); 
+	mv /tmp/impala-$(version).tar.gz rpmbuild/SOURCES
 
 rpm: download
 	rpmbuild $(RPM_OPTS) \
