@@ -1,5 +1,4 @@
 %define debug_package %{nil}
-%define __jar_repack %{nil}
 # disable repacking jars
 %define __os_install_post %{nil}
 
@@ -66,7 +65,9 @@ impala state-store daemon script
 %build
 export IMPALA_HOME=`pwd`
 yes | ./bin/bootstrap_system.sh
-./buildall.sh -notests -release
+
+# here should noclean unless will clean fe or be source files
+./buildall.sh -noclean -notests -release
 
 %install
 %{__rm} -rf %{buildroot}
